@@ -24,6 +24,15 @@ function Reques(props) {
     
   }
 
+  const banksHandlerChange = (e) => {
+    const {banks, value} = e.target
+    setProducts(prevState => ({
+      ...prevState,
+      [banks]: value
+    }))
+    
+  }
+
   const handlerChange = (e) => {
     const { name, value } = e.target;
     setValue((prevState) => ({
@@ -46,7 +55,6 @@ function Reques(props) {
     const data = {
       currency: value.curency,
       product_or_service: value.products,
-      from_company: +value.From_company,
       counterparty_bank: +value.Counterparty_bank,
       products: productArray
     };
