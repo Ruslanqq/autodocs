@@ -1,4 +1,4 @@
-import axios, { Axios } from "axios";
+
 import React, { useEffect, useState } from "react";
 import { axiosSSR } from "../../api/axios";
 import '../../index.css'
@@ -55,7 +55,7 @@ function Reques(props) {
     const data = {
       currency: value.curency,
       product_or_service: value.products,
-      counterparty_bank: +value.Counterparty_bank,
+      counterparty_bank: +banks.id,
       products: productArray
     };
     await axiosSSR.post("api/request/", data);
@@ -139,10 +139,10 @@ function Reques(props) {
         </label>
         <label>
           Counterparty bank:
-          <select name="Counterparty_bank" value={value.banks} onChange={handlerChange}>
+          <select name="Counterparty_bank" onChange={banksHandlerChange}>
             {
               banks?.company?.banks?.map(item => (
-                <option key={item.id}>{item.company_bank_name_ru}</option>
+                <option value={value.banks} key={item.id}>{item.company_bank_name_ru}</option>
               ))
             }
           </select>
