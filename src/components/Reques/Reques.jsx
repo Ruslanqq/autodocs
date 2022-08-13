@@ -23,15 +23,11 @@ function Reques(props) {
     }))
     
   }
-
   const banksHandlerChange = (e) => {
-    const {banks, value} = e.target
-    setProducts(prevState => ({
-      ...prevState,
-      [banks]: value
-    }))
-    
+    setBanks(e.target.valuе)
+    console.log(e.target.value)
   }
+ 
 
   const handlerChange = (e) => {
     const { name, value } = e.target;
@@ -55,9 +51,10 @@ function Reques(props) {
     const data = {
       currency: value.curency,
       product_or_service: value.products,
-      counterparty_bank: +value.Counterparty_bank,
+      counterparty_bank: banks.id,
       products: productArray
     };
+    console.log(data);
     await axiosSSR.post("api/request/", data);
   }
 
@@ -66,9 +63,9 @@ function Reques(props) {
       const data = await axiosSSR.get("/api/products/");
       setState(data.data);
       const banks = await axiosSSR.get("/api/users/profile/");
-      setBanks(banks.data);
+      banks(banks.data);
       // const id = await axiosSSR.get("/api/users/profile/");
-      // setBanks(id.data);
+      // setId(id.data);
     };
    
     hui();
@@ -139,10 +136,10 @@ function Reques(props) {
         </label>
         <label>
           Counterparty bank:
-          <select name="Counterparty_bank" value={value.banks} onChange={handlerChange}>
+          <select name="counterparty_bank"  onChange={banksHandlerChange}>
             {
               banks?.company?.banks?.map(item => (
-                <option key={item.id}>{item.company_bank_name_ru}</option>
+                <option value={value.id} key={item.id}>{item.company_bank_name_ru}</option>
               ))
             }
           </select>
