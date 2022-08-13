@@ -12,6 +12,10 @@ html {
     color: #fff;
 }
 
+.reques{
+    text-align: center;
+}
+
 body {
     min-height: 100vh;
     background-color: dodgerblue;
@@ -111,4 +115,9 @@ button {
 
 .line {
     display: inline-block;
+}
+
+.price_input{
+    max-width: 150px;
+    max-height: 25px;
 }

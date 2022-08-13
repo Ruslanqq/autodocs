@@ -15,7 +15,6 @@ axiosSSR.interceptors.request.use(config => {
                 "Authorization": `Token ${window.localStorage.getItem("token")}`
             }
         }
-        console.log(config)
         return config; 
     }, error => Promise.reject(error) 
 )
@@ -24,6 +23,7 @@ axiosSSR.interceptors.response.use(
     (res ) => ({
       error: null,
       data: res.data,
+      
     }),
     (err) => ({
       error: {
@@ -31,5 +31,8 @@ axiosSSR.interceptors.response.use(
         message: err.message || 'An unexpected error has occurred',
       },
       data: null,
+      
     })
   )
+
+  

@@ -1,94 +1,149 @@
 import axios, { Axios } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { axiosSSR } from "../../api/axios";
+import '../../index.css'
 
 function Reques(props) {
-    const [value, setValue] = useState({
-      hui: "1",
-      products: "Product",
-      curency: "USD",
-      From_company: "1"
-    });
-    const handlerChange = (e) => {
-      const {name, value} = e.target
-      setValue((prevState) => ({
-        ...prevState,
-        [name]: value
-      }))
-    };
-    console.log(value)
+  const [value, setValue] = useState({
+    hui: "1",
+    products: "Product",
+    curency: "USD",
+    From_company: "1",
+  });
+  const [state, setState] = useState();
+  const [products, setProducts] = useState()
+  const [productArray, setProductsArray] = useState([])
+  const [banks, setBanks] = useState()
   
-  async function postForm(e){
+  const productsHandlerChange = (e) => {
+    const {name, value} = e.target
+    setProducts(prevState => ({
+      ...prevState,
+      [name]: value
+    }))
+    
+  }
+
+  const handlerChange = (e) => {
+    const { name, value } = e.target;
+    setValue((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handlerClick = (e) => {
     e.preventDefault()
-    const url = "http://170.187.147.23:8000/api/request/"
+    setProductsArray(prevState => ([
+      ...prevState,
+      products
+    ]))
+    setProducts({})
+  }
+
+  async function postForm(e) {
+    e.preventDefault();
     const data = {
       currency: value.curency,
       product_or_service: value.products,
       from_company: +value.From_company,
-      counterparty_bank: +value.hui,
-      products: [
-        {
-          "product_id": 1,
-          "price": 10000
-      },
-      {
-          "product_id": 2,
-          "price": 3000
-      }
-      ]
-    }
-    await axiosSSR.post("api/request/", data)
+      counterparty_bank: +value.Counterparty_bank,
+      products: productArray
+    };
+    await axiosSSR.post("api/request/", data);
   }
-  
-  
-  
-  const submitForm = async (e)=>{
+
+  useEffect(() => {
+    const hui = async () => {
+      const data = await axiosSSR.get("/api/products/");
+      setState(data.data);
+      const banks = await axiosSSR.get("/api/users/profile/");
+      setBanks(banks.data);
+      // const id = await axiosSSR.get("/api/users/profile/");
+      // setBanks(id.data);
+    };
+   
+    hui();
+
+  }, []);
+  console.log(banks)
+ 
+
+  const submitForm = async (e) => {
     e.preventDefault();
-    
-  }
-  
-    return (
-      <div className="reques">
-        <h1>Подать заявку</h1>
-        <form id="form" onSubmit={postForm}>
+  };
+
+  return (
+    <div className="reques">
+      <h1>Подать заявку</h1>
+      <form id="form" onSubmit={postForm}>
         <label>
-        Currency: 
-        <select name="curency" value={value.curency} onChange={handlerChange}>
-          <option id="123" value="USD">USD</option>
-          <option id="123" value="EURO">EURO</option>
-          <option id="123" value="RUB">RUB</option>
-        </select>
+          Currency:
+          <select name="curency" value={value.curency} onChange={handlerChange}>
+            <option id="123" value="USD">
+              USD
+            </option>
+            <option id="123" value="EURO">
+              EURO
+            </option>
+            <option id="123" value="RUB">
+              RUB
+            </option>
+          </select>
+        </label>
+        <div>
+          {state?.map((item) => {
+            return (
+              <div key={item.id}>
+                <p>Products:</p>
+                <select onChange={productsHandlerChange} name={"product_id"}>
+                  
+                  <option value>---</option>
+                  
+                    <option value={item.id}>
+                      {item.name}
+                    </option>
+                  
+                </select>
+               <input className="price_input"
+                  type="text"
+                  placeholder="цена"
+                  name={`price`}
+                  onChange={productsHandlerChange}
+                />  
+                <span>{item.price}</span>
+                <button onClick={handlerClick}>добавить продукт</button>
+              </div> 
+
+            );
+          })}
+        </div>
+        <label>
+          Products or Services:
+          <select
+            name="products_or_service"
+            value={value.products}
+            onChange={handlerChange}
+          >
+            <option value="Product">Products</option>
+            <option value="Service">Service</option>
+          </select>
         </label>
         <label>
-        From company: 
-        <select name="From_company" value={value.From_company} onChange={handlerChange}>
-          <option id="123" value="1">Company</option>
-          <option id="123" value="2">Company1</option>
-          <option id="123" value="3">Company2</option>
-        </select>
+          Counterparty bank:
+          <select name="Counterparty_bank" value={value.banks} onChange={handlerChange}>
+            {
+              banks?.company?.banks?.map(item => (
+                <option key={item.id}>{item.company_bank_name_ru}</option>
+              ))
+            }
+          </select>
         </label>
-        <label>
-        Products: 
-        <select name="products" value={value.products} onChange={handlerChange}>
-          <option value="Product">Products</option>
-          <option value="Service">Products1</option>
-        </select>
-        </label>
-        <label>
-        Counterparty bank: 
-        <select name="hui" value={value.hui} onChange={handlerChange}>
-          <option value="1">Hui</option>
-          <option value="2">Hui1</option>
-        </select>
-        </label>
-        <input type="submit" value="Submit" />
-        </form>
-      </div>
-    );
-  
-    
-  }
-  
-  
-  // export HandleSubmit;
-  export default Reques;
+        <input type="submit" value="Submit"/>
+      </form>
+    </div>
+  );
+}
+
+// export HandleSubmit;
+export default Reques;
