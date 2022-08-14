@@ -23,15 +23,18 @@ function Reques(props) {
     }))
     
   }
-
   const banksHandlerChange = (e) => {
-    const {banks, value} = e.target
-    setProducts(prevState => ({
-      ...prevState,
-      [banks]: value
-    }))
-    
+    setBanks(e.target.valuе)
+    console.log(e.target.value)
   }
+  // const banksHandlerChange = (e) => {
+  //   const {banks, value} = e.target
+  //   setProducts(prevState => ({
+  //     ...prevState,
+  //     [banks]: value
+  //   }))
+    
+  // }
 
   const handlerChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +58,7 @@ function Reques(props) {
     const data = {
       currency: value.curency,
       product_or_service: value.products,
-      counterparty_bank: +banks.id,
+      counterparty_bank: setBanks.id,
       products: productArray
     };
     await axiosSSR.post("api/request/", data);
@@ -84,11 +87,11 @@ function Reques(props) {
   return (
     <div className="reques">
       <h1>Подать заявку</h1>
-      <form id="form" onSubmit={postForm}>
+      <form className="form1" id="form" onSubmit={postForm}>
         <label>
           Currency:
-          <select name="curency" value={value.curency} onChange={handlerChange}>
-            <option id="123" value="USD">
+          <select className="Currency" name="curency" value={value.curency} onChange={handlerChange}>
+            <option className="Currency123" id="123" value="USD">
               USD
             </option>
             <option id="123" value="EURO">
@@ -104,7 +107,7 @@ function Reques(props) {
             return (
               <div key={item.id}>
                 <p>Products:</p>
-                <select onChange={productsHandlerChange} name={"product_id"}>
+                <select className="Products" onChange={productsHandlerChange} name={"product_id"}>
                   
                   <option value>---</option>
                   
@@ -114,13 +117,13 @@ function Reques(props) {
                   
                 </select>
                <input className="price_input"
-                  type="text"
+                  type="number"
                   placeholder="цена"
                   name={`price`}
                   onChange={productsHandlerChange}
                 />  
-                <span>{item.price}</span>
-                <button onClick={handlerClick}>добавить продукт</button>
+                <span className="price__item">{item.price}</span>
+                <button className="add_products" onClick={handlerClick}>добавить продукт</button>
               </div> 
 
             );
@@ -129,6 +132,7 @@ function Reques(props) {
         <label>
           Products or Services:
           <select
+            className="Products_or_Services"
             name="products_or_service"
             value={value.products}
             onChange={handlerChange}
@@ -139,15 +143,15 @@ function Reques(props) {
         </label>
         <label>
           Counterparty bank:
-          <select name="Counterparty_bank" onChange={banksHandlerChange}>
+          <select className="Counterparty" name="Counterparty_bank" onChange={banksHandlerChange}>
             {
               banks?.company?.banks?.map(item => (
-                <option value={value.banks} key={item.id}>{item.company_bank_name_ru}</option>
+                <option value={value.setBanks} key={item.id}>{item.company_bank_name_ru}</option>
               ))
             }
           </select>
         </label>
-        <input type="submit" value="Submit"/>
+        <input className="submit_button" type="submit" value="Submit"/>
       </form>
     </div>
   );
