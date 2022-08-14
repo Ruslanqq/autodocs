@@ -58,7 +58,7 @@ function Reques(props) {
     const data = {
       currency: value.curency,
       product_or_service: value.products,
-      counterparty_bank: setBanks.id,
+      counterparty_bank: banks.id,
       products: productArray
     };
     await axiosSSR.post("api/request/", data);
@@ -146,7 +146,7 @@ function Reques(props) {
           <select className="Counterparty" name="Counterparty_bank" onChange={banksHandlerChange}>
             {
               banks?.company?.banks?.map(item => (
-                <option value={value.setBanks} key={item.id}>{item.company_bank_name_ru}</option>
+                <option value={value.banks} key={item.id}>{item.company_bank_name_ru}</option>
               ))
             }
           </select>
