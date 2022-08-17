@@ -76,9 +76,11 @@ function Reques(props) {
    
     hui();
 
-  }, []);
+  }, []
+  );
   console.log(banks)
  
+  
 
   const submitForm = async (e) => {
     e.preventDefault();
@@ -126,6 +128,7 @@ function Reques(props) {
                 <button className="add_products" onClick={handlerClick}>добавить продукт</button>
               </div> 
 
+
             );
           })}
         </div>
@@ -149,6 +152,7 @@ function Reques(props) {
                 <option value={value.banks} key={item.id}>{item.company_bank_name_ru}</option>
               ))
             }
+            {/* console.log(company) */}
           </select>
         </label>
         <input className="submit_button" type="submit" value="Submit"/>
