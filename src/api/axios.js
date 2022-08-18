@@ -20,7 +20,7 @@ axiosSSR.interceptors.request.use(config => {
 )
 
 axiosSSR.interceptors.response.use(
-    (res ) => ({
+    (res ) => ({ 
       error: null,
       data: res.data,
       
@@ -34,5 +34,3 @@ axiosSSR.interceptors.response.use(
       
     })
   )
-
-  

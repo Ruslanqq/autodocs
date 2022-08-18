@@ -5,8 +5,6 @@ import { axiosSSR } from '../api/axios';
 const Login = () => {
     const userRef = useRef();
     const errRef = useRef();
-  
-
     const [username, setUser] = useState('');
     const [password, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
@@ -44,6 +42,7 @@ const Login = () => {
         <>
             {success ? (
                 <section>
+                    
                     <h1>You are logged in!</h1>
                     <br />
                     <p>

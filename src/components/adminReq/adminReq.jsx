@@ -15,7 +15,9 @@ function Reques(props) {
   const [toNameCompany, setToNameCompany] = useState()
   const [products, setProducts] = useState()
   const [productArray, setProductsArray] = useState([])
-  const [banks, setBanks] = useState("0")
+  const [banks, setBanks] = useState()
+  const [newBanks, setNewBanks] = useState()
+  
 
   console.log(banks)
 
@@ -32,7 +34,7 @@ function Reques(props) {
     
   // }
   const banksHandlerChange = (e) => {
-    setBanks(e.target.valuе)
+    setNewBanks(e.target.valuе)
   
   }
   const companyHandlerChange = (e) => {
@@ -71,27 +73,43 @@ function Reques(props) {
     const data = {
       status: value.status,  
       toCompany: setToNameCompany.toCompany,
-      bank: setBanks.bank,
+      bank: banks.bank,
       products: productArray
     };
     await axiosSSR.post("api/request_admin/", data);
   }
 
+  
 
 
   useEffect(() => {
     const hui = async () => {
+     try {
       const data = await axiosSSR.get("/api/products/");
       setState(data.data);
-      const banks = await axiosSSR.get("/api/users/profile/");
-      setBanks(banks.data);
+      const banks = await axiosSSR.get("/api/companies/");
+      const newBanks = banks?.data?.flatMap((item)=>{
+        return item.banks.map((item) =>{
+          return {
+            id:item.id,
+            company_bank_name_ru: item.company_bank_name_ru
+          }
+        })
+      })
+      console.log(newBanks)
       const toCompany = await axiosSSR.get("/api/companies/");
       setToNameCompany(toCompany.data);
+     } catch (error) {
+      console.log(error)
+     }
     };
    
     hui();
 
   }, []);
+  
+
+  
 
  
 
@@ -146,14 +164,15 @@ function Reques(props) {
               ----
             </option>
             {
-              banks?.company?.banks?.map(item => (
-                <option value={item.id} key={item.id}>{item.company_bank_name_ru}</option>
+              newBanks?.map(item => (
+                <option value={item.data} key={item.id}>{item.company_bank_name_ru}</option>
               ))
             }
           </select>
         </label>
         {/* <<button name="confirm_bank">Confirm</button>> */}
-        <div>
+        <div className="input_checkbox">
+        Подтвердить:<br/>
         <input checked={value.status} type='checkbox' name="status" onChange={statusHundler}></input>
         </div>
         <input className="submit_button" type="submit" value="Submit"/>
@@ -164,3 +183,5 @@ function Reques(props) {
 
 // export HandleSubmit;
 export default Reques;
+
+
